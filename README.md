@@ -25,12 +25,12 @@ source venv/bin/activate
 # Windows
 python -m venv venv
 venv\Scripts\activate
-3.  **Install dependencies**
+#  **Install dependencies**
 pip install -r requirements.txt
-4.  **Prepare the input data**
+#  **Prepare the input data**
 Place the raw JSON file containing the JIRA issue data in the data/bronze/ directory.
 Ensure the file is named bronze_issues.json, as expected by the ingestion script.
-5.  **Execute the pipeline**
+#  **Execute the pipeline**
 Navigate to the src/ folder and run the scripts in the correct order:
 cd src/
     - 5.1. Ingest raw data (Bronze layer)
@@ -40,7 +40,7 @@ cd src/
         python silver/calendar_utils.py
     - 5.3. Build analytical tables (Gold layer)
         python gold/build_gold_sla.py
-6.  **Execute the pipeline**
+#  **Execute the pipeline**
 The final results (.csv files) will be available in the data/gold/ directory.
 
 ### Pipeline Architecture
