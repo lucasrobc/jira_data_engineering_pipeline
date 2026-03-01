@@ -32,7 +32,7 @@ Place the raw JSON file containing the JIRA issue data in the data/bronze/ direc
 Ensure the file is named bronze_issues.json, as expected by the ingestion script.
 #  **Execute the pipeline**
 Navigate to the src/ folder and run the scripts in the correct order:
-cd src/
+- cd src/
     - 5.1. Ingest raw data (Bronze layer)
         python bronze/ingest_bronze.py
     - 5.2. Transform data (Silver layer)
