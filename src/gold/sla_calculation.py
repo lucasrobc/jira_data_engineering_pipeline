@@ -27,8 +27,8 @@ def calculate_business_hours(
     created_at,
     resolved_at,
     calendar_df: pd.DataFrame,
-    business_start_hour: int = 8,
-    business_end_hour: int = 18,
+    business_start_hour: int = 0,
+    business_end_hour: int = 24,            # 24 means midnight of the following day
 ) -> float:
 
     # Calculate business hours between created_at and resolved_at using silver calendar table
@@ -61,21 +61,24 @@ def calculate_business_hours(
         current_date = row["date"]
  
         # Create timestamps with UTC timezone for the start and end of the workday
+        if business_end_hour == 24:
+            business_end = pd.Timestamp(current_date, tz='UTC') + pd.Timedelta(days=1)
+        else:
+            business_end = pd.Timestamp(
+                year=current_date.year,
+                month=current_date.month,
+                day=current_date.day,
+                hour=business_end_hour,
+                minute=0,
+                second=0,
+                tz='UTC'
+            )
+        
         business_start = pd.Timestamp(
             year=current_date.year,
             month=current_date.month,
             day=current_date.day,
             hour=business_start_hour,
-            minute=0,
-            second=0,
-            tz='UTC'
-        )
-        
-        business_end = pd.Timestamp(
-            year=current_date.year,
-            month=current_date.month,
-            day=current_date.day,
-            hour=business_end_hour,
             minute=0,
             second=0,
             tz='UTC'

@@ -24,34 +24,30 @@ def load_business_calendar(calendar_path: str) -> pd.DataFrame:
 
 # Business hours calculation using calendar table
 def calculate_business_hours(
-    created_at,
-    resolved_at,
+    created_at: str,
+    resolved_at: str,
     calendar_df: pd.DataFrame,
     business_start_hour: int = 8,
     business_end_hour: int = 18,
 ) -> float:
-
-    # Calculate business hours between created_at and resolved_at using silver calendar table
-    if pd.isna(created_at) or pd.isna(resolved_at):
-        return 0.0
-
+    
+    #Calculate business hours using pre-generated calendar table
     start_dt = pd.to_datetime(created_at, utc=True)
     end_dt = pd.to_datetime(resolved_at, utc=True)
 
+    if pd.isna(start_dt) or pd.isna(end_dt):
+        return 0.0
     if end_dt <= start_dt:
         return 0.0
 
-    start_date = start_dt.date()
-    end_date = end_dt.date()
+    start_date = start_dt.normalize()
+    end_date = end_dt.normalize()
 
-    calendar_df = calendar_df.copy()
-    calendar_df["date"] = pd.to_datetime(calendar_df["date"]).dt.date
-
-    # Filter relevant dates from the calendar
+    # Filter relevant dates from calendar
     mask = (
         (calendar_df["date"] >= start_date) &
         (calendar_df["date"] <= end_date) &
-        (calendar_df["business_day"] == 1)
+        (calendar_df["is_business_day"] == 1)
     )
 
     business_days = calendar_df.loc[mask]
@@ -59,29 +55,16 @@ def calculate_business_hours(
 
     for _, row in business_days.iterrows():
         current_date = row["date"]
- 
-        # Create timestamps with UTC timezone for the start and end of the workday
-        business_start = pd.Timestamp(
-            year=current_date.year,
-            month=current_date.month,
-            day=current_date.day,
-            hour=business_start_hour,
-            minute=0,
-            second=0,
-            tz='UTC'
-        )
-        
-        business_end = pd.Timestamp(
-            year=current_date.year,
-            month=current_date.month,
-            day=current_date.day,
-            hour=business_end_hour,
-            minute=0,
-            second=0,
-            tz='UTC'
-        )
 
-        # Calculate the overlapping interval
+        business_start = pd.Timestamp.combine(
+            current_date.date(),
+            time(business_start_hour, 0),
+        ).tz_localize("UTC")
+        business_end = pd.Timestamp.combine(
+            current_date.date(),
+            time(business_end_hour, 0),
+        ).tz_localize("UTC")
+
         interval_start = max(start_dt, business_start)
         interval_end = min(end_dt, business_end)
 
@@ -92,6 +75,7 @@ def calculate_business_hours(
     return round(total_hours, 2)
 
 # SLA compliance using calendar table
+
 def check_sla_compliance(
     created_at: str,
     resolved_at: str,
