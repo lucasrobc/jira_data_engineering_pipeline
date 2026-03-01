@@ -20,13 +20,19 @@ Follow the steps below to set up the environment and run the pipeline.
     cd <repository-name>
 2.  **Create and activate a virtual environment**
 # Linux/macOS
-python3 -m venv venv
-source venv/bin/activate
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate 
+    ```
 # Windows
-python -m venv venv
-venv\Scripts\activate
+    ```bash
+    python -m venv venv
+    venv\Scripts\activate
+    ```
 #  **Install dependencies**
-pip install -r requirements.txt
+    ```bash
+    pip install -r requirements.txt
+    ```
 #  **Prepare the input data**
 Place the raw JSON file containing the JIRA issue data in the data/bronze/ directory.
 Ensure the file is named bronze_issues.json, as expected by the ingestion script.
@@ -34,12 +40,12 @@ Ensure the file is named bronze_issues.json, as expected by the ingestion script
 Navigate to the src/ folder and run the scripts in the correct order:
 - cd src/
     - 5.1. Ingest raw data (Bronze layer)
-        python bronze/ingest_bronze.py
+        - bronze/ingest_bronze.py
     - 5.2. Transform data (Silver layer)
-        python silver/transform_silver_issues.py
-        python silver/calendar_utils.py
+        - silver/transform_silver_issues.py
+        - silver/calendar_utils.py
     - 5.3. Build analytical tables (Gold layer)
-        python gold/build_gold_sla.py
+        - gold/build_gold_sla.py
 #  **Execute the pipeline**
 The final results (.csv files) will be available in the data/gold/ directory.
 
