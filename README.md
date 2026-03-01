@@ -20,19 +20,16 @@ Follow the steps below to set up the environment and run the pipeline.
     cd <repository-name>
 2.  **Create and activate a virtual environment**
 # Linux/macOS
-    ```bash
     python3 -m venv venv
     source venv/bin/activate 
-    ```
+
 # Windows
-    ```bash
     python -m venv venv
     venv\Scripts\activate
-    ```
+
 #  **Install dependencies**
-    ```bash
     pip install -r requirements.txt
-    ```
+
 #  **Prepare the input data**
 Place the raw JSON file containing the JIRA issue data in the data/bronze/ directory.
 Ensure the file is named bronze_issues.json, as expected by the ingestion script.
