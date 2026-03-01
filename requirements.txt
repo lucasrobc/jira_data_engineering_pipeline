@@ -1,0 +1,6 @@
+# requirements.txt
+# Libraries required for running the data pipeline
+
+pandas>=2.0.0
+holidays>=0.25
+pyarrow>=12.0.0  # Required for reading/writing Parquet files.
