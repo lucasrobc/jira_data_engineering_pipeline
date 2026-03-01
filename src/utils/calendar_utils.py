@@ -6,7 +6,7 @@ import holidays
 
 # Define the start and end range of the calendar table
 start_date = "2025-01-01"
-end_date = "2026-01-31"
+end_date = datetime.now().strftime("%Y-%m-%d")
 dates = pd.date_range(start=start_date, end=end_date, freq="D")
 
 # Creating the data frame
